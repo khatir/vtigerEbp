@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QT>
 #include <QSettings>
+#include <QEventLoop>
 
 
 #include "json/reader.h"
@@ -22,25 +23,26 @@ class HttpCRM : public QObject
 public:
     explicit HttpCRM(QObject *parent = 0);
     HttpCRM(QString username);
-    void post(QByteArray data);
+    QByteArray post(QByteArray data);
+
+    void getChallenge(QByteArray data);
+    void login(QByteArray data);
+    void create(QByteArray data);
+
+    QString username;
+    QString hashAccess ;
+    QString sessionName;
+    QString userID;
 
 signals:
-    void doLogin();
 
 public slots:
-    void httpFinished(QNetworkReply* r);
 
 private:
 
     QNetworkAccessManager qnam;
     QNetworkRequest req;
 
-    QString username;
-    QString sessionName;
-
-
-    QString etat ;
-    QString hashAccess ;
 };
 
 #endif // HTTPCRM_H

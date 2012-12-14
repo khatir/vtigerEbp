@@ -10,16 +10,13 @@ class Operation : public QObject
 public:
     explicit Operation(QObject *parent = 0);
 
-
-    void launch() ;
-
+    void getChallenge(HttpCRM* http) ;
+    void login(HttpCRM* http);
+    void create(HttpCRM* http, QString attributes);
     
 signals:
-    void getChallenge() ;
 
 public slots:
-    void login();
-    void create();
     
 };
 

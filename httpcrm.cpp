@@ -19,31 +19,27 @@ HttpCRM::HttpCRM(QString username)
     req.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
 }
 
-void HttpCRM::post( QByteArray data)
+QByteArray HttpCRM::post( QByteArray data)
 {
-    connect(&qnam, SIGNAL(finished(QNetworkReply *)),
-         this, SLOT(httpFinished(QNetworkReply *)));
+    // Utilisé pour boucler sur les signaux
+    QEventLoop loop;
 
-    qnam.post(req,data) ;
-}
+    connect(&qnam, SIGNAL(finished(QNetworkReply *)), &loop, SLOT(quit()));
+    QNetworkReply* reply = qnam.post(req,data) ;
 
-void HttpCRM::httpFinished(QNetworkReply*  r)
-{
-    qDebug("HttpCRM::httpFinished enter");
-    QString data = (QString) r->readAll();
-    qDebug() <<data ;
+    // Attend le retour du signaux
+    loop.exec(QEventLoop::AllEvents|QEventLoop::WaitForMoreEvents);
 
-    //emit getChallenge();
+    return reply->readAll();
+
+//    connect(&qnam, SIGNAL(finished(QNetworkReply *)),
+//         this, SLOT(httpFinished(QNetworkReply *)));
+
 }
 
 
 
 /*
-
-void HttpCRM::startRequest()
-{
-
-}
 
 
 void HttpCRM::startRequest()
@@ -150,5 +146,47 @@ void HttpCRM::setUrl(QString url)
 }
 */
 
+void HttpCRM::getChallenge(QByteArray data)
+{
+    Json::Value root;   // will contains the root value after parsing.
+    Json::Reader reader;
 
+    bool parsingSuccessful = reader.parse(((QString) data).toStdString(),root) ;
 
+    std::string temp = root["result"]["token"].asString() ;
+    qDebug() <<  QString::fromStdString(temp) ;
+    QString token = QString::fromStdString(temp) +  "UgHo2O2SVVjeoGKL" ;
+    qDebug() << token ;
+
+    hashAccess = QString(QCryptographicHash::hash(token.toAscii() ,QCryptographicHash::Md5).toHex()) ;
+    qDebug() << hashAccess ;
+
+}
+
+void HttpCRM::login(QByteArray data)
+{
+    Json::Value root;   // will contains the root value after parsing.
+    Json::Reader reader;
+
+    bool parsingSuccessful = reader.parse(((QString) data).toStdString(),root) ;
+
+    qDebug() << ((QString) data) ;
+
+    std::string temp = root["result"]["sessionName"].asString() ;
+    sessionName =  QString::fromStdString(temp) ;
+
+    temp = root["result"]["userId"].asString() ;
+    userID =  QString::fromStdString(temp) ;
+}
+
+void HttpCRM::create(QByteArray data)
+{
+    Json::Value root;   // will contains the root value after parsing.
+    Json::Reader reader;
+
+    bool parsingSuccessful = reader.parse(((QString) data).toStdString(),root) ;
+
+    qDebug() << " HttpCRM::create" ;
+    //std::string temp = root["result"]["sessionName"].asString() ;
+
+}

@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 
      // SIMULATION Script easy
      QString idLead = "" ;
-     QString attributes = "{firstname:\"Toti\",lastname:\"Turlut\"}" ;
-     QString username = "kenny" ;
+     QString attributes = "{\"firstname\":\"Toti\",\"lastname\":\"Turlut\",\"company\":\"Vtiger\"}" ;
+     QString username = "admin" ;
 
      createOrUpdateLead(username,idLead,attributes);
 
@@ -28,23 +28,12 @@ int main(int argc, char *argv[])
 /* exemple de fonction appelé par une script easy */
 void createOrUpdateLead(QString username,QString idLead,QString attributes)
 {
-    /* ATTENTION khatir les signaux ne sont pas bien gérés */
+
     Operation* op = new Operation();
+    HttpCRM* http = new HttpCRM(username);
 
-    qDebug() << "Connect getChallenge->Login" ;
-    QObject::connect(op, SIGNAL(getChallenge()),
-            op, SLOT(login()));
+    op->getChallenge(http);
+    op->login(http);
+    op->create(http,attributes);
 
-
-    qDebug() << "Connect getChallenge->create" ;
-    QObject::connect(op, SIGNAL(getChallenge()),
-            op, SLOT(create()));
-
-    op->launch();
-    // getchallenge
-    // retour
-    // login
-    // retour
-    // create
-    // retour
 }
