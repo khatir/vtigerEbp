@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
 /* exemple de fonction appelé par une script easy */
 void createOrUpdateLead(QString username,QString idLead,QString attributes)
 {
+    /* ATTENTION khatir les signaux ne sont pas bien gérés */
     Operation* op = new Operation();
-
 
     qDebug() << "Connect getChallenge->Login" ;
     QObject::connect(op, SIGNAL(getChallenge()),
