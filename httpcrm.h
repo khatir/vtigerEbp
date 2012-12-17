@@ -22,17 +22,20 @@ class HttpCRM : public QObject
     Q_OBJECT
 public:
     explicit HttpCRM(QObject *parent = 0);
-    HttpCRM(QString username);
+    HttpCRM(QString username,QString moduleName);
     QByteArray post(QByteArray data);
 
     void getChallenge(QByteArray data);
     void login(QByteArray data);
-    void create(QByteArray data);
+    void createOrUpdate(QByteArray data);
 
     QString username;
+    QString moduleName;
     QString hashAccess ;
     QString sessionName;
     QString userID;
+    Json::Value entity;
+
 
     /* Enum Entity : objectTypeId utilisé par les WS pour identifier le type d'entié */
     enum Entity {
