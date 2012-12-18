@@ -4,7 +4,7 @@
 #include "operation.h"
 
 
-void createOrUpdateLead(QString teleop,QString idLead,QString attributes) ;
+void createOrUpdate(QString teleop,QString id,QString moduleName,QString attributes) ;
 
 int main(int argc, char *argv[])
 {
@@ -16,24 +16,29 @@ int main(int argc, char *argv[])
     // http->startRequest();
 
      // SIMULATION Script easy
-     QString idLead = "" ;
-     QString attributes = "{\"firstname\":\"Toti\",\"lastname\":\"Turlut\",\"company\":\"Vtiger\"}" ;
+     QString idLead = "10x133" ;
+     QString attributes = "{\"firstname\":\"Tuuuuuuuuuuuuuuuuuuuuuuuuuuuuu\",\"lastname\":\"Turlut\",\"company\":\"Vtiger\"}" ;
      QString username = "admin" ;
 
-     createOrUpdateLead(username,idLead,attributes);
+     createOrUpdate(username,idLead,"Leads",attributes);
 
     return a.exec();
 }
 
 /* exemple de fonction appelé par une script easy */
-void createOrUpdateLead(QString username,QString idLead,QString attributes)
+void createOrUpdate(QString username,QString id,QString moduleName, QString attributes)
 {
 
     Operation* op = new Operation();
-    HttpCRM* http = new HttpCRM(username);
+    HttpCRM* http = new HttpCRM(username,moduleName);
 
     op->getChallenge(http);
     op->login(http);
-    op->create(http,attributes);
+    if( id == "")
+        op->create(http,attributes);
+    else
+        op->update(http,id,attributes);
+
+    qDebug() << QString::fromStdString(http->entity["id"].asString())  ;
 
 }

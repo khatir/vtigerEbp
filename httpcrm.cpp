@@ -7,10 +7,11 @@ HttpCRM::HttpCRM(QObject *parent) :
 
 }
 
-HttpCRM::HttpCRM(QString username)
+HttpCRM::HttpCRM(QString username,QString moduleName)
 {
     /* Initialisation des parametres */
     this->username = username;
+    this->moduleName = moduleName;
 
     QSettings settings ("C:/Users/Kenny/Desktop/ebp.ini",QSettings::IniFormat);
     QString url = settings.value("url").toString();
@@ -158,7 +159,7 @@ void HttpCRM::getChallenge(QByteArray data)
     QString token = QString::fromStdString(temp) +  "UgHo2O2SVVjeoGKL" ;
     qDebug() << token ;
 
-    hashAccess = QString(QCryptographicHash::hash(token.toAscii() ,QCryptographicHash::Md5).toHex()) ;
+    hashAccess = QString(QCryptographicHash::hash(token.toUtf8() ,QCryptographicHash::Md5).toHex()) ;
     qDebug() << hashAccess ;
 
 }
@@ -179,7 +180,7 @@ void HttpCRM::login(QByteArray data)
     userID =  QString::fromStdString(temp) ;
 }
 
-void HttpCRM::create(QByteArray data)
+void HttpCRM::createOrUpdate(QByteArray data)
 {
     Json::Value root;   // will contains the root value after parsing.
     Json::Reader reader;
@@ -187,6 +188,7 @@ void HttpCRM::create(QByteArray data)
     bool parsingSuccessful = reader.parse(((QString) data).toStdString(),root) ;
 
     qDebug() << " HttpCRM::create" ;
+    qDebug() << data ;
     //std::string temp = root["result"]["sessionName"].asString() ;
-
+    this->entity = root["result"]  ;
 }
