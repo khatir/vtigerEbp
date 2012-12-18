@@ -30,6 +30,7 @@ public:
     void createOrUpdate(QByteArray data);
 
     QString username;
+    QString AccessKey ;
     QString moduleName;
     QString hashAccess ;
     QString sessionName;
