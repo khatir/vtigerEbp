@@ -11,9 +11,10 @@ HttpCRM::HttpCRM(QString username,QString moduleName)
 {
     /* Initialisation des parametres */
     this->username = username;
+    this->AccessKey = username + "SATEL";
     this->moduleName = moduleName;
 
-    QSettings settings ("C:/Users/Kenny/Desktop/ebp.ini",QSettings::IniFormat);
+    QSettings settings ("D:/Qt/Projects/vtigerEbp/ebp.ini",QSettings::IniFormat);
     QString url = settings.value("url").toString();
 
     req = QNetworkRequest(QUrl(url)) ;
@@ -156,7 +157,7 @@ void HttpCRM::getChallenge(QByteArray data)
 
     std::string temp = root["result"]["token"].asString() ;
     qDebug() <<  QString::fromStdString(temp) ;
-    QString token = QString::fromStdString(temp) +  "UgHo2O2SVVjeoGKL" ;
+    QString token = QString::fromStdString(temp) +  this->AccessKey ; //"UgHo2O2SVVjeoGKL" ;
     qDebug() << token ;
 
     hashAccess = QString(QCryptographicHash::hash(token.toUtf8() ,QCryptographicHash::Md5).toHex()) ;
