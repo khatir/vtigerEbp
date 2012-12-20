@@ -153,7 +153,7 @@ void HttpCRM::getChallenge(QByteArray data)
     Json::Value root;   // will contains the root value after parsing.
     Json::Reader reader;
 
-    bool parsingSuccessful = reader.parse(((QString) data).toStdString(),root) ;
+    bool parsingSuccessful = reader.parse(((QString) data).toStdString(), root) ;
 
     std::string temp = root["result"]["token"].asString() ;
     qDebug() <<  QString::fromStdString(temp) ;

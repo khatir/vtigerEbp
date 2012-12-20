@@ -1,10 +1,10 @@
 #include "operation.h"
-
+//----------------------------------------------------------------------------
 Operation::Operation(QObject *parent) :
     QObject(parent)
 {
 }
-
+//----------------------------------------------------------------------------
 /*
 void Operation::getChallenge()
 {
@@ -22,7 +22,7 @@ void Operation::getChallenge()
             http, SLOT(httpFinished(QNetworkReply *)));
 }
 */
-
+//----------------------------------------------------------------------------
 void Operation::getChallenge(HttpCRM* http)
 {
     qDebug() << " Operation::launch " ;
@@ -34,20 +34,20 @@ void Operation::getChallenge(HttpCRM* http)
     data = http->post(data) ;
     http->getChallenge(data);
 }
-
+//----------------------------------------------------------------------------
 void Operation::login(HttpCRM* http)
 {
      qDebug() << " Operation::login " ;
 
      QByteArray data;
      data.append("operation=login");
-     data.append("&username=admin");
+     data.append("&username="+http->username);
      data.append("&accessKey=" + http->hashAccess );
 
      data = http->post(data) ;
      http->login(data);
 }
-
+//----------------------------------------------------------------------------
 void Operation::create(HttpCRM* http, QString attributes)
 {
      qDebug() << " Operation::create " ;
@@ -68,10 +68,10 @@ void Operation::create(HttpCRM* http, QString attributes)
      data = http->post(data) ;
      http->createOrUpdate(data);
 }
-
+//----------------------------------------------------------------------------
 void Operation::update(HttpCRM* http, QString objectID, QString attributes)
 {
-     qDebug() << " Operation::create " ;
+     qDebug() << " Operation::update " ;
      // ajout du userID
      Json::Value root;   // will contains the root value after parsing.
      Json::Reader reader;
@@ -89,3 +89,4 @@ void Operation::update(HttpCRM* http, QString objectID, QString attributes)
      data = http->post(data) ;
      http->createOrUpdate(data);
 }
+//----------------------------------------------------------------------------

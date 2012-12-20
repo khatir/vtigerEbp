@@ -9,15 +9,15 @@ QT      += network
 QT       -= gui
 
 TARGET = vtigerEbp
-CONFIG   += console
-CONFIG   -= app_bundle
+# CONFIG   += console
+# CONFIG   -= app_bundle
 
-TEMPLATE = app
+TEMPLATE = lib
+DEFINES += VTIGEREBP_LIBRARY
 
-
-SOURCES += main.cpp \
-    entity.cpp \
-    operation.cpp
+SOURCES += entity.cpp \
+    operation.cpp \
+    vtigerebp.cpp
 SOURCES += httpcrm.cpp
 SOURCES += json/json_reader.cpp
 SOURCES += json/json_value.cpp
@@ -26,7 +26,17 @@ SOURCES += json/json_writer.cpp
 HEADERS += \
     httpcrm.h \
     entity.h \
-    operation.h
+    operation.h \
+    vtigerEbp_global.h \
+    vtigerebp.h
 
 HEADERS += json/value.h
 HEADERS += json/reader.h
+
+
+# DEFINES += MYDLL_LIBRARY
+
+# SOURCES += mydll.cpp
+
+# HEADERS += mydll.h\
+#        myDll_global.h
